@@ -1,22 +1,24 @@
+```python
 import os
 import requests
+from datetime import datetime
 
 
-# =========================
-# SETTINGS
-# =========================
+# -----------------------------
+# Settings
+# -----------------------------
 
-MY_LATITUDE = 32.635109
-MY_LONGITUDE = 51.367641
+MY_LATITUDE = 32.637654
+MY_LONGITUDE = 51.370705
 
 MY_API_KEY = os.environ["OPENWEATHER_API_KEY"]
 MY_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 MY_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
 
-# =========================
-# GET WEATHER
-# =========================
+# -----------------------------
+# Get weather data
+# -----------------------------
 
 weather_params = {
     "lat": MY_LATITUDE,
@@ -38,21 +40,47 @@ response.raise_for_status()
 data = response.json()
 
 
-# =========================
-# CREATE MESSAGE
-# =========================
+# -----------------------------
+# Persian day names
+# -----------------------------
 
-message = "🌤️ پیش‌بینی هوای امروز:\n\n"
+day_names = {
+    "Saturday": "شنبه",
+    "Sunday": "یکشنبه",
+    "Monday": "دوشنبه",
+    "Tuesday": "سه‌شنبه",
+    "Wednesday": "چهارشنبه",
+    "Thursday": "پنجشنبه",
+    "Friday": "جمعه"
+}
+
+
+# -----------------------------
+# Create Telegram message
+# -----------------------------
+
+message = "🌤️ پیش‌بینی هوا:\n\n"
 
 for item in data["list"]:
 
-    time = item["dt_txt"]
+    date_time = datetime.strptime(
+        item["dt_txt"],
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    day_name = day_names[date_time.strftime("%A")]
+
+    date = date_time.strftime("%Y-%m-%d")
+    time = date_time.strftime("%H:%M")
+
     temperature = round(item["main"]["temp"])
     weather = item["weather"][0]["description"]
     wind_speed = item["wind"]["speed"]
 
     message += (
-        f"🕐 زمان: {time}\n"
+        f"📅 تاریخ: {date}\n"
+        f"🗓️ روز: {day_name}\n"
+        f"🕐 ساعت: {time}\n"
         f"🌡️ دما: {temperature}°C\n"
         f"☁️ وضعیت: {weather}\n"
         f"🍃 سرعت باد: {wind_speed} m/s\n"
@@ -60,9 +88,9 @@ for item in data["list"]:
     )
 
 
-# =========================
-# SEND TO TELEGRAM
-# =========================
+# -----------------------------
+# Send message to Telegram
+# -----------------------------
 
 telegram_url = (
     f"https://api.telegram.org/bot{MY_BOT_TOKEN}/sendMessage"
@@ -82,3 +110,12 @@ telegram_response = requests.post(
 telegram_response.raise_for_status()
 
 print("✅ Weather sent successfully!")
+```
+
+**نکته:** این کد از همان سه GitHub Secret قبلی استفاده می‌کند:
+
+* `OPENWEATHER_API_KEY`
+* `TELEGRAM_BOT_TOKEN`
+* `TELEGRAM_CHAT_ID`
+
+پس **هیچ کلید یا توکنی را داخل کد قرار نده**. فقط همین فایل را جایگزین `weather.py` قبلی کن و یک بار از `Actions → Run workflow` تستش کن.
