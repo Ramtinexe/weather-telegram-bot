@@ -1,4 +1,4 @@
-```python
+
 import os
 import requests
 from datetime import datetime
@@ -112,10 +112,4 @@ telegram_response.raise_for_status()
 print("✅ Weather sent successfully!")
 ```
 
-**نکته:** این کد از همان سه GitHub Secret قبلی استفاده می‌کند:
 
-* `OPENWEATHER_API_KEY`
-* `TELEGRAM_BOT_TOKEN`
-* `TELEGRAM_CHAT_ID`
-
-پس **هیچ کلید یا توکنی را داخل کد قرار نده**. فقط همین فایل را جایگزین `weather.py` قبلی کن و یک بار از `Actions → Run workflow` تستش کن.
