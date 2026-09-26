@@ -7,8 +7,8 @@ from datetime import datetime
 # Settings
 # -----------------------------
 
-MY_LATITUDE = 32.637654
-MY_LONGITUDE = 51.370705
+MY_LATITUDE = os.environ["LATITUDE"]
+MY_LONGITUDE = os.environ["LONGITUDE"]
 
 MY_API_KEY = os.environ["OPENWEATHER_API_KEY"]
 MY_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
