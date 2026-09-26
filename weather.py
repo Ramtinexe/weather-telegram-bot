@@ -1,4 +1,3 @@
-
 import os
 import requests
 from datetime import datetime
@@ -110,6 +109,6 @@ telegram_response = requests.post(
 telegram_response.raise_for_status()
 
 print("✅ Weather sent successfully!")
-```
+
 
 
